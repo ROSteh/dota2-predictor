@@ -677,14 +677,75 @@
             "faction": "Radiant", 
             "name": "Monkey King", 
             "id": 114
+        },
+        {
+            "primary_attribute": "Intelligence",
+            "faction": "Radiant",
+            "name": "Dark Willow",
+            "id": 119
+        },
+        {
+            "primary_attribute": "Agility",
+            "faction": "Radiant",
+            "name": "Pangolier",
+            "id": 120
+        },
+        {
+            "primary_attribute": "Intelligence",
+            "faction": "Dire",
+            "name": "Grimstroke",
+            "id": 121
+        },
+        {
+            "primary_attribute": "Agility",
+            "faction": "Radiant",
+            "name": "Hoodwink",
+            "id": 123
+        },
+        {
+            "primary_attribute": "Intelligence",
+            "faction": "Radiant",
+            "name": "Void Spirit",
+            "id": 126
+        },
+        {
+            "primary_attribute": "Strength",
+            "faction": "Dire",
+            "name": "Snapfire",
+            "id": 128
+        },
+        {
+            "primary_attribute": "Strength",
+            "faction": "Radiant",
+            "name": "Mars",
+            "id": 129
+        },
+        {
+            "primary_attribute": "Strength",
+            "faction": "Radiant",
+            "name": "Dawnbreaker",
+            "id": 135
+        },
+        {
+            "primary_attribute": "Strength",
+            "faction": "Dire",
+            "name": "Marci",
+            "id": 136
+        },
+        {
+            "primary_attribute": "Strength",
+            "faction": "Dire",
+            "name": "Primal Beast",
+            "id": 137
         }
-    ], 
+
+    ],
     "patches": [
         {
-            "heroes_released": 114, 
+            "heroes_released": 137,
             "patch_name": "7.06e", 
-            "first_match_id": 3293000000, 
-            "last_match_id": 3306144409
+            "first_match_id": 6525227303,
+            "last_match_id": 6536983009
         }
     ]
 }

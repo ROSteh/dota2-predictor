@@ -3,7 +3,7 @@ import numpy as np
 
 from matplotlib import pyplot as plt
 import plotly.graph_objs as go
-import plotly.plotly as py
+from chart_studio import plotly as py
 from sklearn.model_selection import train_test_split
 
 from training.cross_validation import evaluate

@@ -13,12 +13,13 @@
 
 
 	<head>
-	<title>Dota 2 Predictor</title>
+		<link rel="icon" href="/static/images/dota_icon.png" type="image/x-icon">
+		<title>Dota 2 Predictor</title>
 	</head>
 
 	<body>
 		<nav class="navbar navbar-fixed-top navbar-color-on-scroll" role="navigation">
-		  <div class="container">
+			<div class="container">
 		    <!-- Brand and toggle get grouped for better mobile display -->
 		    <div class="navbar-header col-sm-3">
 		      <button id="menu-toggle" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation-index">
@@ -27,10 +28,9 @@
 		        <span class="icon-bar bar2"></span>
 		        <span class="icon-bar bar3"></span>
 		      </button>
-
 					<div class="input-group text-center">
 						<div class="form-group is-empty has-info">
-							<input name="hero-search" id="hero-search" type="text" class="form-control" placeholder="Search for a hero">
+							<input name="hero-search" id="hero-search" type="text" class="form-control" placeholder="Поиск героя">
 							<span class="material-input"></span>
 						</div>
 						<span class="input-group-addon">
@@ -43,15 +43,16 @@
 		    <div class="collapse navbar-collapse" id="#navigation-index">
 				  <div class="col-sm-3 text-center">
 				    <form class="form-group has-info">
-				      <input id="mmr" rel="tooltip" data-placement="bottom" title="Enter the average MMR of the game" placeholder="Average MMR" type="text" class="form-control"></input>
+				      <input id="mmr" rel="tooltip" data-placement="bottom" title="Введите средний MMR игры" placeholder="Средний MMR" type="text" class="form-control"></input>
 				    </form>
 				  </div>
 				  <div style="padding-top:20px;"  class="col-sm-3 text-center">
-				    <button id="predict_button"  rel="tooltip" title="For predicting the winner, select all the heroes in the game." data-placement="bottom" class="disabled btn-default btn-round btn-md btn submit-btn">Predict winner</button>
+				    <button id="predict_button"  rel="tooltip" title="Чтобы предсказать победителя, выберите всех героев в игре." data-placement="bottom" class="disabled btn-default btn-round btn-md btn submit-btn">Победитель</button>
 				  </div>
 				  <div style="padding-top:20px;" class="col-sm-3 text-center">
-				    <button id="suggest_button" rel="tooltip" title="For getting last pick suggestions, select the other 9 heroes." data-placement="bottom" class="disabled btn-default btn-round btn-md btn submit-btn">Suggest hero</button>
+				    <button id="suggest_button" rel="tooltip" title="Чтобы получить предложения по последнему выбору, выберите 9 героев." data-placement="bottom" class="disabled btn-default btn-round btn-md btn submit-btn">Предложить героя</button>
 				  </div>
+			</div>
 		  </div><!-- /.container-fluid -->
 		</nav>
 
@@ -110,15 +111,7 @@
 	  </div>
 	</div>
 	</body>
-	<footer>
-		<div class="col-md-2 col-md-offset-5 col-sm-2 col-sm-offset-5 col-xs-2 col-xs-offset-5">
-			<a target="_blank" href="https://github.com/andreiapostoae/dota2-predictor" class="btn btn-github" style="text-align: center; background: #333333;">
-	      <i class="fa fa-github"></i>
-	        GitHub Page
-			</a>
-		</div>
-		<img id='temp' src='/static/images/puck_full.jpg'>
-	</footer>
+
 </html>
 <script>
 

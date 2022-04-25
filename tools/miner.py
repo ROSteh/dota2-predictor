@@ -6,9 +6,9 @@ import pandas as pd
 import ssl
 import time
 import urllib3
-
-from metadata import get_last_patch
-from pandas.io.json import json_normalize
+import urllib.error
+from tools.metadata import get_last_patch
+from pandas import json_normalize
 
 
 OPENDOTA_URL = "https://api.opendota.com/api/publicMatches?less_than_match_id="
@@ -28,7 +28,7 @@ def mine_data(file_name=None,
               first_match_id=first_match,
               last_match_id=last_match,
               stop_at=None,
-              timeout=15,
+              timeout=1.5,
               save_every=1000):
     """ Mine data using the official Opendota API. Keep requests at a decent rate (3/s).
     For every request, a JSON containing 100 games is returned. The games are downloaded
@@ -54,13 +54,14 @@ def mine_data(file_name=None,
     current_chunk = 1
     current_match_id = last_match_id
     games_remaining = stop_at
+    http = urllib3.PoolManager()
 
     while current_match_id > first_match_id:
         try:
             current_link = OPENDOTA_URL + str(current_match_id)
             logger.info("Mining chunk starting at match ID %d", current_match_id)
-            response = urllib3.request("GET", current_link)
-        except (urllib3.URLError, ssl.SSLError) as error:
+            response = http.request('GET', current_link, timeout=timeout)
+        except (urllib.error.URLError, ssl.SSLError) as error:
             logger.error("Failed to make a request starting at match ID %d", current_match_id)
             logger.info("Waiting %d seconds before retrying", timeout)
             time.sleep(timeout)
@@ -68,7 +69,7 @@ def mine_data(file_name=None,
             continue
 
         try:
-            response_json = json.load(response)
+            response_json = json.loads(response.data)
             last_match_id = response_json[-1]['match_id']
         except (ValueError, KeyError) as error:
             logger.error("Corrupt JSON starting at match ID %d, skipping it", current_match_id)
@@ -76,19 +77,16 @@ def mine_data(file_name=None,
             continue
 
         current_match_id = last_match_id
-
         if games_remaining:
             games_remaining -= len(response_json)
 
         current_dataframe = json_normalize(response_json)
-
         if len(current_dataframe) == 0:
             logger.info("Found an empty dataframe, skipping 10 games")
             current_match_id -= 10
             continue
 
-        results_dataframe = results_dataframe.append(current_dataframe, ignore_index=True)
-
+        results_dataframe = pd.concat([results_dataframe, current_dataframe], ignore_index=True)
         if len(results_dataframe) >= current_chunk * save_every:
             current_chunk += 1
 

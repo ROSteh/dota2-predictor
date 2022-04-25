@@ -2,8 +2,7 @@
 import numpy as np
 
 import plotly.graph_objs as go
-import plotly.plotly as py
-
+from chart_studio import plotly as py
 from tools.metadata import get_hero_dict
 
 

@@ -1,6 +1,5 @@
 """ Module for showing examples of dota predictor's API usage """
 import logging
-import numpy as np
 
 from preprocessing.dataset import read_dataset
 from tools.metadata import get_last_patch, get_patch
@@ -24,8 +23,8 @@ def mine_data_example():
 
     # mine 1000 games between given match IDs and save file
     mine_data(file_name='mine_test.csv',
-              first_match_id=3492535023,
-              last_match_id=3498023575,
+              first_match_id=6525227303,
+              last_match_id=6536983009,
               stop_at=1000)
 
 

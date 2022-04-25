@@ -5,7 +5,7 @@ import random
 
 import numpy as np
 import pandas as pd
-import plotly.plotly as py
+from chart_studio import plotly as py
 import plotly.graph_objs as go
 import tensorflow as tf
 from sklearn.manifold import TSNE

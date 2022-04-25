@@ -4,8 +4,7 @@ import operator
 import pandas as pd
 
 import plotly.graph_objs as go
-import plotly.plotly as py
-
+from chart_studio import plotly as py
 
 def winrate_statistics(dataset_df, mmr_info):
     x_data, y_data = dataset_df
