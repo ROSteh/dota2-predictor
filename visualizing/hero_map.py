@@ -7,7 +7,9 @@ import numpy as np
 import pandas as pd
 from chart_studio import plotly as py
 import plotly.graph_objs as go
-import tensorflow as tf
+import tensorflow._api.v2.compat.v1 as tf
+from joblib.numpy_pickle_utils import xrange
+
 from sklearn.manifold import TSNE
 from sklearn.cluster import KMeans
 
@@ -311,7 +313,7 @@ def _plot_similarities(embeddings, heroes_dict, reverse_dictionary, perplexity=2
     data = traces
     figure = go.Figure(data=data, layout=layout)
 
-    py.iplot(figure, filename='heromap')
+    py.plot(figure, filename='heromap')
 
 
 def plot_hero_map(csv_path,

@@ -45,13 +45,13 @@ def _plot_matplotlib(subset_sizes, data_list, mmr):
 
     plt.legend(['Cross validation error', 'Test error'])
     plt.xscale('log')
-    plt.xlabel('Dataset size')
-    plt.ylabel('Error')
+    plt.xlabel('Размер набора данных')
+    plt.ylabel('Ошибки')
 
     if mmr:
-        plt.title('Learning curve plot for %d MMR' % mmr)
+        plt.title('График кривая обучения для %d MMR' % mmr)
     else:
-        plt.title('Learning curve plot')
+        plt.title('График кривая обучения')
 
     plt.show()
 
@@ -64,19 +64,19 @@ def _plot_plotly(subset_sizes, data_list, mmr):
         mmr: what MMR the data is taken from
     """
     if mmr:
-        title = 'Learning curve plot for %d MMR' % mmr
+        title = 'Кривая обучаемости для %d MMR' % mmr
     else:
-        title = 'Learning curve plot'
+        title = 'Кривая обучаемости'
 
     trace0 = go.Scatter(
         x=subset_sizes,
         y=data_list[0],
-        name='Cross validation error'
+        name='Ошибки перекрестной проверки'
     )
     trace1 = go.Scatter(
         x=subset_sizes,
         y=data_list[1],
-        name='Test error'
+        name='Ошибки теста'
     )
     data = go.Data([trace0, trace1])
 
@@ -84,7 +84,7 @@ def _plot_plotly(subset_sizes, data_list, mmr):
         title=title,
 
         xaxis=dict(
-            title='Dataset size (logspace)',
+            title='Размер набора данных (logspace)',
             type='log',
             autorange=True,
             titlefont=dict(
@@ -94,7 +94,7 @@ def _plot_plotly(subset_sizes, data_list, mmr):
             )
         ),
         yaxis=dict(
-            title='Error',
+            title='Ошибки',
             titlefont=dict(
                 family='Courier New, monospace',
                 size=15,

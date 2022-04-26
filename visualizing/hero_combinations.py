@@ -2,7 +2,7 @@
 import numpy as np
 
 import plotly.graph_objs as go
-from chart_studio import plotly as py
+import plotly.offline as py
 from tools.metadata import get_hero_dict
 
 
@@ -47,7 +47,7 @@ def plot_synergies():
     data = [trace]
     fig = go.Figure(data=data, layout=layout)
 
-    py.iplot(fig, filename='heatmap_synergies')
+    py.plot(fig, filename='heatmap_synergies')
 
 
 def plot_counters():
@@ -93,4 +93,4 @@ def plot_counters():
     data = [trace]
     fig = go.Figure(data=data, layout=layout)
 
-    py.iplot(fig, filename='heatmap_counters')
+    py.plot(fig, filename='heatmap_counters')
