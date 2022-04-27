@@ -17,15 +17,17 @@ logger = logging.getLogger(__name__)
 
 
 def mine_data_example():
+    mine_data(file_name='test_dataset.csv')
+
     # mine 100 games from the last patch
-    mined_df = mine_data(stop_at=100)
-    logger.info("First 5 rows from the mined dataframe are: \n%s", mined_df.head().to_string())
+    #mined_df = mine_data(stop_at=100)
+    #logger.info("First 5 rows from the mined dataframe are: \n%s", mined_df.head().to_string())
 
     # mine 1000 games between given match IDs and save file
-    mine_data(file_name='mine_test.csv',
-              first_match_id=6525227303,
-              last_match_id=6536983009,
-              stop_at=1000)
+    #mine_data(file_name='mine_test.csv',
+    #          first_match_id=6525227303,
+    #          last_match_id=6536983009,-
+    #          stop_at=1000)
 
 
 def patch_data_example():
@@ -61,12 +63,12 @@ def load_dataset_example():
 
 
 def training_example():
-    dataset_train, _ = read_dataset('706e_train_dataset.csv', low_mmr=4500)
-    dataset_test, _ = read_dataset('706e_test_dataset.csv', low_mmr=4500)
+    dataset_train, _ = read_dataset('train_dataset.csv', low_mmr=2999, high_mmr=3100, advantages=True)
+    dataset_test, _ = read_dataset('test_dataset.csv', low_mmr=2999, high_mmr=3100, advantages=True)
 
     # cv is the number of folds to be used when cross validating (default is 5)
     # save_model is the path where the model should be saved (default None)
-    evaluate(dataset_train, dataset_test, cv=7, save_model='test.pkl')
+    evaluate(dataset_train, dataset_test, cv=5, save_model='3000.pkl')
 
 
 def query_example():
@@ -125,12 +127,12 @@ def visualize_data_example():
 
 
 def main():
-    mine_data_example()
-    patch_data_example()
-    load_dataset_example()
+    #mine_data_example()
+    #patch_data_example()
+    #load_dataset_example()
     training_example()
-    query_example()
-    visualize_data_example()
+    #query_example()
+    #visualize_data_example()
 
 
 if __name__ == '__main__':

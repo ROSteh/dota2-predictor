@@ -82,16 +82,16 @@ def _generate_batch(data, batch_size, num_skips, window_size):
     span = 2 * window_size + 1
     buffer = collections.deque(maxlen=span)
 
-    for _ in range(span):
+    for _ in list(range(span)):
         buffer.append(data[data_index])
         data_index = (data_index + 1) % len(data)
 
-    for i in range(batch_size // num_skips):
+    for i in list(range(batch_size // num_skips)):
         # target label at the center of the buffer
         target = window_size
         targets_to_avoid = [window_size]
 
-        for j in range(num_skips):
+        for j in list(range(num_skips)):
             while target in targets_to_avoid:
                 target = random.randint(0, span - 1)
             targets_to_avoid.append(target)
@@ -170,7 +170,7 @@ def _train_word2vec(data,
         logger.info('Initialized graph')
         average_loss = 0
 
-        for step in range(num_steps):
+        for step in list(range(num_steps)):
             batch_data, batch_labels = _generate_batch(data,
                                                        batch_size,
                                                        2 * window_size,
@@ -192,7 +192,7 @@ def _train_word2vec(data,
             if step % 10000 == 0:
                 sim = similarity.eval()
 
-                for i in xrange(valid_size):
+                for i in range(valid_size):
                     valid_word = reverse_dictionary[valid_examples[i]]
 
                     # ignore unknown and padding tokens
@@ -203,7 +203,7 @@ def _train_word2vec(data,
                     nearest = (-sim[i, :]).argsort()[1:top_k + 1]
                     log = 'Nearest to %s:' % valid_word
 
-                    for k in xrange(top_k):
+                    for k in range(top_k):
                         index = reverse_dictionary[nearest[k]]
 
                         if index != 'UNK' and index != 'PAD':
@@ -247,7 +247,7 @@ def _plot_similarities(embeddings, heroes_dict, reverse_dictionary, perplexity=2
 
     number_of_heroes = len(heroes_dict.keys())
     names = number_of_heroes * ['']
-    for i in range(number_of_heroes):
+    for i in list(range(number_of_heroes)):
         names[i] = heroes_dict[int(reverse_dictionary[i + 2])]
 
     x_vals = list(x_vals)
@@ -260,9 +260,9 @@ def _plot_similarities(embeddings, heroes_dict, reverse_dictionary, perplexity=2
     del y_vals[0]
 
     traces = []
-    for cluster in range(max(labels) + 1):
+    for cluster in list(range(max(labels) + 1)):
         indices = []
-        for i in range(len(labels)):
+        for i in list(range(len(labels))):
             if labels[i] == cluster:
                 indices.append(i)
 

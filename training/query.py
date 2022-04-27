@@ -45,21 +45,21 @@ def _query_missing(model,
 
     radiant = len(radiant_heroes) == 4
 
-    for i in range(4):
-        for j in range(4):
+    for i in list(range(4)):
+        for j in list(range(4)):
             if i > j:
                 base_similarity_radiant += similarities[radiant_heroes[i], radiant_heroes[j]]
                 base_similarity_dire += similarities[dire_heroes[i], dire_heroes[j]]
 
     query_base = np.zeros((heroes_released, 2 * heroes_released + 3))
 
-    for i in range(heroes_released):
+    for i in list(range(heroes_released)):
         if radiant:
             radiant_heroes.append(i + 1)
         else:
             dire_heroes.append(i + 1)
 
-        for j in range(5):
+        for j in list(range(5)):
             query_base[i][radiant_heroes[j] - 1] = 1
             query_base[i][dire_heroes[j] - 1 + heroes_released] = 1
 
@@ -86,12 +86,12 @@ def _query_missing(model,
         if i + 1 not in all_heroes and i != 23:
             if radiant:
                 similarity_new = base_similarity_radiant
-                for j in range(4):
+                for j in list(range(4)):
                     similarity_new += similarities[i + 1][radiant_heroes[j]]
                 similarities_list.append(similarity_new)
             else:
                 similarity_new = base_similarity_dire
-                for j in range(4):
+                for j in list(range(4)):
                     similarity_new += similarities[i + 1][dire_heroes[j]]
                 similarities_list.append(similarity_new)
 
@@ -101,7 +101,7 @@ def _query_missing(model,
 
     similarities_list.sort()
 
-    max_similarity_allowed = similarities_list[len(similarities_list) / 4]
+    max_similarity_allowed = similarities_list[len(similarities_list) // 4]
 
     filtered_list = [x for x in results_list if x[1][1] < max_similarity_allowed]
 
@@ -130,7 +130,7 @@ def _query_full(model,
         string with info about the predicted winner team
     """
     features = np.zeros(2 * heroes_released + 3)
-    for i in range(5):
+    for i in list(range(5)):
         features[radiant_heroes[i] - 1] = 1
         features[dire_heroes[i] - 1 + heroes_released] = 1
 
@@ -143,9 +143,9 @@ def _query_full(model,
     probability = model.predict_proba(features_final)[:, 1] * 100
 
     if probability > 50:
-        return "Radiant has %.3f%% chance" % probability
+        return "Победит Radiant с шансом %.3f%%" % probability
     else:
-        return "Dire has %.3f%% chance" % (100 - probability)
+        return "Победит Dire с шансом  %.3f%%" % (100 - probability)
 
 
 def query(mmr, 

@@ -1,4 +1,5 @@
 import logging
+
 import numpy as np
 import pandas as pd
 
@@ -41,15 +42,16 @@ def _dataset_to_features(dataset_df, advantages=None):
         radiant_heroes = list(map(int, row[2].split(',')))
         dire_heroes = list(map(int, row[3].split(',')))
 
-        for j in range(5):
-            x_matrix[i, radiant_heroes[j] - 1] = 1
-            x_matrix[i, dire_heroes[j] - 1 + heroes_released] = 1
+        if len(radiant_heroes) == 5 & len(dire_heroes) == 5:
+            for j in range(5):
+                x_matrix[i, radiant_heroes[j] - 1] = 1
+                x_matrix[i, dire_heroes[j] - 1 + heroes_released] = 1
 
-            if advantages:
-                x_matrix[i, -3:] = augment_with_advantages(synergy_matrix,
-                                                           counter_matrix,
-                                                           radiant_heroes,
-                                                           dire_heroes)
+                if advantages:
+                    x_matrix[i, -3:] = augment_with_advantages(synergy_matrix,
+                                                               counter_matrix,
+                                                               radiant_heroes,
+                                                               dire_heroes)
 
         y_matrix[i] = 1 if radiant_win else 0
 

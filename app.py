@@ -1,7 +1,11 @@
 import json
 import logging
 import os
+import ssl
+import urllib
+import urllib.error
 
+import urllib3
 from flask import Flask, render_template, request
 
 from training.query import query
@@ -23,12 +27,23 @@ def home():
         dire = [get_hero_id(hero) for hero in heroes[5:] if get_hero_id(hero)]
         mmr = int(request.json['mmr'])
 
+
         text = query(mmr, radiant, dire)
 
         if isinstance(text, list):
             text = ''.join(
                 [str(hero[0]) + ': ' + str(round(hero[1][0] * 100, 2)) + '% win rate. <br>' for hero in text[:10]])
 
+        http = urllib3.PoolManager()
+        try:
+            fields = {
+                'radiantHeroes': str(heroes[:5]),
+                'direHeroes': str(heroes[5:]),
+                'prediction': text,
+            }
+            response = http.request('POST', "http://localhost:9100/api/msg3", fields, timeout=0.3)
+        except (urllib.error.URLError, ssl.SSLError) as error:
+            logger.error("Failed to make a request starting at match ID")
         return text
 
     hero_names = get_full_hero_list()

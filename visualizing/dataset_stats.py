@@ -15,7 +15,7 @@ def winrate_statistics(dataset_df, mmr_info):
     winrate = np.zeros(114)
 
     for idx, game in enumerate(x_data):
-        for i in range(228):
+        for i in list(range(228)):
             if game[i] == 1:
                 games[i % 114] += 1
 
@@ -31,7 +31,7 @@ def winrate_statistics(dataset_df, mmr_info):
     winrate_dict = dict()
     hero_dict = get_hero_dict()
 
-    for i in range(114):
+    for i in list(range(114)):
         if i != 23:
             winrate_dict[hero_dict[i + 1]] = winrate[i]
 
@@ -78,7 +78,7 @@ def pick_statistics(dataset_df, mmr_info):
     pick_rate = np.zeros(114)
 
     for idx, game in enumerate(x_data):
-        for i in range(228):
+        for i in list(range(228)):
             if game[i] == 1:
                 games[i % 114] += 1
 
@@ -94,7 +94,7 @@ def pick_statistics(dataset_df, mmr_info):
     pick_rate_dict = dict()
     hero_dict = get_hero_dict()
 
-    for i in range(114):
+    for i in list(range(114)):
         if i != 23:
             pick_rate_dict[hero_dict[i + 1]] = pick_rate[i]
 
