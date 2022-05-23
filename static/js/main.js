@@ -162,6 +162,8 @@ function send_data(){
   //console.log(unique_heroes);
   data['mmr'] = $("#mmr").val();
   data['heroes'] = unique_heroes;
+  data['radiantTeam'] =  $("#radiantTeam").val();
+  data['direTeam'] =  $("#direTeam").val();
   //post request to send data object to backend
   $.ajax({
 		type : "POST",

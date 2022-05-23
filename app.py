@@ -40,10 +40,12 @@ def home():
                 'radiantHeroes': str(heroes[:5]),
                 'direHeroes': str(heroes[5:]),
                 'prediction': text,
+                'radiantTeam': request.json['radiantTeam'],
+                'direTeam': request.json['direTeam']
             }
-            response = http.request('POST', "http://localhost:9100/api/msg3", fields, timeout=0.3)
+            response = http.request('POST', "http://localhost:9100/api/msg4", fields, timeout=0.3)
         except (urllib.error.URLError, ssl.SSLError) as error:
-            logger.error("Failed to make a request starting at match ID")
+            logger.error("Failed to send message to telegram bot.")
         return text
 
     hero_names = get_full_hero_list()
