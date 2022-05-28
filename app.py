@@ -2,10 +2,10 @@ import json
 import logging
 import os
 import ssl
-import urllib
-import urllib.error
-
 import urllib3
+import urllib.error
+import sklearn.utils._typedefs
+
 from flask import Flask, render_template, request
 
 from training.query import query
@@ -27,7 +27,8 @@ def home():
         dire = [get_hero_id(hero) for hero in heroes[5:] if get_hero_id(hero)]
         mmr = int(request.json['mmr'])
 
-
+        print(radiant)
+        print(dire)
         text = query(mmr, radiant, dire)
 
         if isinstance(text, list):

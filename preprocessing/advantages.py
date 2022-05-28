@@ -17,17 +17,12 @@ def _update_dicts(game, synergy, counter):
 
     radiant_heroes = list(map(int, radiant_heroes.split(',')))
     dire_heroes = list(map(int, dire_heroes.split(',')))
-
-    if len(radiant_heroes) == 5 & len(dire_heroes) == 5:
+    if len (radiant_heroes) == 5 & len (dire_heroes) == 5:
         for i in list(range(5)):
             for j in list(range(5)):
                 if i != j:
-                    try:
-                        synergy['games'][radiant_heroes[i] - 1, radiant_heroes[j] - 1] += 1
-                    except IndexError:
-                        print(i + '' + j + radiant_heroes)
-
-                        synergy['games'][dire_heroes[i] - 1, dire_heroes[j] - 1] += 1
+                    synergy['games'][radiant_heroes[i] - 1, radiant_heroes[j] - 1] += 1
+                    synergy['games'][dire_heroes[i] - 1, dire_heroes[j] - 1] += 1
 
                     if radiant_win:
                         synergy['wins'][radiant_heroes[i] - 1, radiant_heroes[j] - 1] += 1
@@ -149,7 +144,6 @@ def compute_advantages(dataset_df):
     synergy['wins'] = np.zeros((heroes_released, heroes_released))
     synergy['games'] = np.zeros((heroes_released, heroes_released))
     synergy['winrate'] = np.zeros((heroes_released, heroes_released))
-    print(heroes_released)
 
     counter = dict()
     counter['wins'] = np.zeros((heroes_released, heroes_released))
@@ -166,7 +160,7 @@ def compute_advantages(dataset_df):
     synergy_matrix, counter_matrix = _calculate_advantages(synergy, counter, heroes_released)
 
     # uncomment only for overwriting precomputed advantages - NOT RECOMMENDED
-    np.savetxt('pretrained/synergies_all.csv', synergy_matrix)
-    np.savetxt('pretrained/counters_all.csv', counter_matrix)
+    # np.savetxt('pretrained/synergies_all.csv', synergy_matrix)
+    # np.savetxt('pretrained/counters_all.csv', counter_matrix)
 
     return [synergy_matrix, counter_matrix]

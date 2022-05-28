@@ -80,22 +80,34 @@ def _query_missing(model,
 
     heroes_dict = get_hero_dict()
     similarities_list = []
+    err_skip = 0
 
     results_dict = {}
     for i, prob in enumerate(probabilities):
-        if i + 1 not in all_heroes and i != 23:
-            if radiant:
-                similarity_new = base_similarity_radiant
-                for j in list(range(4)):
-                    similarity_new += similarities[i + 1][radiant_heroes[j]]
-                similarities_list.append(similarity_new)
-            else:
-                similarity_new = base_similarity_dire
-                for j in list(range(4)):
-                    similarity_new += similarities[i + 1][dire_heroes[j]]
-                similarities_list.append(similarity_new)
+        if len(radiant_heroes) + len(dire_heroes) == 9:
+            if i + 1 not in all_heroes and i != 23:
+                if radiant:
+                    similarity_new = base_similarity_radiant
+                    for j in list(range(4)):
+                        try:
+                            similarity_new += similarities[i + 1][radiant_heroes[j]]
+                        except:
+                            err_skip += 1
+                    similarities_list.append(similarity_new)
+                else:
+                    similarity_new = base_similarity_dire
+                    for j in list(range(4)):
+                        try:
+                            similarity_new += similarities[i + 1][dire_heroes[j]]
+                        except:
+                            err_skip += 1
 
-            results_dict[heroes_dict[i + 1]] = (prob, similarity_new)
+                    similarities_list.append(similarity_new)
+
+                try:
+                    results_dict[heroes_dict[i + 1]] = (prob, similarity_new)
+                except:
+                    err_skip += 1
 
     results_list = sorted(results_dict.items(), key=operator.itemgetter(1), reverse=True)
 
@@ -212,11 +224,12 @@ def query(mmr,
                            cnts,
                            heroes_released)
 
-    return _query_missing(model,
-                          scaler,
-                          radiant_heroes,
-                          dire_heroes,
-                          syns,
-                          cnts,
-                          sims,
-                          heroes_released)
+    if len(radiant_heroes) + len(dire_heroes) == 9:
+        return _query_missing(model,
+                              scaler,
+                              radiant_heroes,
+                              dire_heroes,
+                              syns,
+                              cnts,
+                              sims,
+                              heroes_released)

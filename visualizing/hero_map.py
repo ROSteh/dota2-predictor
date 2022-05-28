@@ -5,11 +5,9 @@ import random
 
 import numpy as np
 import pandas as pd
-from chart_studio import plotly as py
+import plotly.offline as py
 import plotly.graph_objs as go
-import tensorflow._api.v2.compat.v1 as tf
-from joblib.numpy_pickle_utils import xrange
-
+import tensorflow as tf
 from sklearn.manifold import TSNE
 from sklearn.cluster import KMeans
 
@@ -136,16 +134,16 @@ def _train_word2vec(data,
 
     valid_size = 15
     valid_examples = np.random.randint(0, vocabulary_size, valid_size)
-
+    err_skip = 0
     graph = tf.Graph()
 
     with graph.as_default(), tf.device('/cpu:0'):
-        train_dataset = tf.placeholder(tf.int32, shape=[batch_size])
-        train_labels = tf.placeholder(tf.float32, shape=[batch_size, 1])
+        train_dataset = tf.compat.v1.placeholder(tf.int32, shape=[batch_size])
+        train_labels = tf.compat.v1.placeholder(tf.float32, shape=[batch_size, 1])
         valid_dataset = tf.constant(valid_examples, dtype=tf.int32)
 
-        embeddings = tf.Variable(tf.random_uniform([vocabulary_size, embedding_size], -1.0, 1.0))
-        softmax_weights = tf.Variable(tf.truncated_normal([vocabulary_size, embedding_size],
+        embeddings = tf.Variable(tf.random.uniform([vocabulary_size, embedding_size], -1.0, 1.0))
+        softmax_weights = tf.Variable(tf.random.truncated_normal([vocabulary_size, embedding_size],
                                                           stddev=1.0 / math.sqrt(embedding_size)))
         softmax_biases = tf.Variable(tf.zeros([vocabulary_size]))
 
@@ -158,15 +156,15 @@ def _train_word2vec(data,
                                        neg_samples,
                                        vocabulary_size))
 
-        optimizer = tf.train.AdagradOptimizer(1.0).minimize(loss)
+        optimizer = tf.compat.v1.train.AdagradOptimizer(1.0).minimize(loss)
 
-        norm = tf.sqrt(tf.reduce_sum(tf.square(embeddings), 1, keep_dims=True))
+        norm = tf.sqrt(tf.compat.v1.reduce_sum(tf.square(embeddings), 1, keepdims=True))
         normalized_embeddings = embeddings / norm
         valid_embeddings = tf.nn.embedding_lookup(normalized_embeddings, valid_dataset)
         similarity = tf.matmul(valid_embeddings, tf.transpose(normalized_embeddings))
 
-    with tf.Session(graph=graph) as session:
-        session.run(tf.global_variables_initializer())
+    with tf.compat.v1.Session(graph=graph) as session:
+        session.run(tf.compat.v1.global_variables_initializer())
         logger.info('Initialized graph')
         average_loss = 0
 
@@ -193,26 +191,31 @@ def _train_word2vec(data,
                 sim = similarity.eval()
 
                 for i in range(valid_size):
-                    valid_word = reverse_dictionary[valid_examples[i]]
+                    try:
+                        valid_word = reverse_dictionary[valid_examples[i]]
+                        # ignore unknown and padding tokens
+                        if valid_word != 'UNK' and valid_word != 'PAD':
+                            valid_word = heroes_dict[int(reverse_dictionary[valid_examples[i]])]
 
-                    # ignore unknown and padding tokens
-                    if valid_word != 'UNK' and valid_word != 'PAD':
-                        valid_word = heroes_dict[int(reverse_dictionary[valid_examples[i]])]
+                        top_k = 8  # number of nearest neighbors to print
+                        nearest = (-sim[i, :]).argsort()[1:top_k + 1]
+                        log = 'Nearest to %s:' % valid_word
 
-                    top_k = 8  # number of nearest neighbors to print
-                    nearest = (-sim[i, :]).argsort()[1:top_k + 1]
-                    log = 'Nearest to %s:' % valid_word
+                        for k in range(top_k):
+                            try:
+                                index = reverse_dictionary[nearest[k]]
 
-                    for k in range(top_k):
-                        index = reverse_dictionary[nearest[k]]
+                                if index != 'UNK' and index != 'PAD':
+                                    close_word = heroes_dict[int(index)]
+                                else:
+                                    close_word = index
+                                log = '%s %s,' % (log, close_word)
+                            except:
+                                err_skip+=1
 
-                        if index != 'UNK' and index != 'PAD':
-                            close_word = heroes_dict[int(index)]
-                        else:
-                            close_word = index
-                        log = '%s %s,' % (log, close_word)
-
-                    logger.info(log)
+                        logger.info(log)
+                    except:
+                        err_skip+=1
         final_embeddings = normalized_embeddings.eval()
 
     return final_embeddings
@@ -236,7 +239,7 @@ def _plot_similarities(embeddings, heroes_dict, reverse_dictionary, perplexity=2
     two_d_embeddings = tsne.fit_transform(embeddings)
 
     # Apply KMeans on the data in order to clusterize by role
-    kmeans = KMeans(n_clusters=4, n_jobs=-1)
+    kmeans = KMeans(n_clusters=4)
     kmeans.fit(tsne.embedding_)
 
     labels = kmeans.labels_
@@ -263,10 +266,11 @@ def _plot_similarities(embeddings, heroes_dict, reverse_dictionary, perplexity=2
     for cluster in list(range(max(labels) + 1)):
         indices = []
         for i in list(range(len(labels))):
-            if labels[i] == cluster:
+            if labels[i] == cluster and i < 123:
                 indices.append(i)
 
         cluster_text = 'Mixed'
+
         heroes_in_cluster = [names[i] for i in indices]
         if 'Terrorblade' in heroes_in_cluster:
             cluster_text = 'Carry'
@@ -283,7 +287,7 @@ def _plot_similarities(embeddings, heroes_dict, reverse_dictionary, perplexity=2
             mode='markers+text',
             text=[names[i] for i in indices],
             name=cluster_text,
-            textposition='top'
+            textposition='top center'
         )
 
         traces.append(trace)
@@ -295,7 +299,7 @@ def _plot_similarities(embeddings, heroes_dict, reverse_dictionary, perplexity=2
             showgrid=False,
             zeroline=False,
             showline=False,
-            autotick=True,
+            dtick=True,
             ticks='',
             showticklabels=False
         ),
@@ -304,7 +308,7 @@ def _plot_similarities(embeddings, heroes_dict, reverse_dictionary, perplexity=2
             showgrid=False,
             zeroline=False,
             showline=False,
-            autotick=True,
+            dtick=True,
             ticks='',
             showticklabels=False
         )

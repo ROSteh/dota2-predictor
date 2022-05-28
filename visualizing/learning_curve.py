@@ -43,7 +43,7 @@ def _plot_matplotlib(subset_sizes, data_list, mmr):
     plt.plot(subset_sizes, data_list[0], lw=2)
     plt.plot(subset_sizes, data_list[1], lw=2)
 
-    plt.legend(['Cross validation error', 'Test error'])
+    plt.legend(['Ошибка перекрестной проверки', 'Тестовая ошибка'])
     plt.xscale('log')
     plt.xlabel('Размер набора данных')
     plt.ylabel('Ошибки')

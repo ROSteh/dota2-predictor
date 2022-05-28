@@ -63,13 +63,12 @@ def load_dataset_example():
 
 
 def training_example():
-    dataset_train, _ = read_dataset('train_dataset.csv', low_mmr=2999, high_mmr=3100, advantages=True)
-    dataset_test, _ = read_dataset('test_dataset.csv', low_mmr=2999, high_mmr=3100, advantages=True)
+    dataset_train, _ = read_dataset('train_dataset.csv', low_mmr=0, advantages=None)
+    dataset_test, _ = read_dataset('test_dataset.csv',  low_mmr=0, advantages=None)
 
     # cv is the number of folds to be used when cross validating (default is 5)
     # save_model is the path where the model should be saved (default None)
-    evaluate(dataset_train, dataset_test, cv=5, save_model='3000.pkl')
-
+    evaluate(dataset_train, dataset_test, cv=5, save_model='2000-.pkl')
 
 def query_example():
     # having the models pretrained on specific MMR ranges (see pretrained folder), query the result
@@ -78,9 +77,11 @@ def query_example():
     # query for the result given the 5v5 configuration in a game around 3000 average MMR
     # radiant team: Huskar, Clinkz, Lifestealer, Luna, Lich
     # dire team: Venomancer, Faceless Void, Leshrac, Ancient Apparition, Broodmother
-    full_result = query(3000,
-                        [59, 56, 54, 48, 31],
-                        [40, 41, 52, 68, 61])
+    full_result = query(6000,
+                        [42, 120, 43, 33, 45],
+                        [23, 25, 108, 86, 21])
+    logger.info("Radiant id:[42, 120, 43, 33, 45]")
+    logger.info("Dire id:[23, 25, 108, 86, 21]")
     logger.info("The result of the full query is: %s", full_result)
 
     # query for the result given the 4v5 or 5v4 configuration in a game around 3000 average MMR
@@ -88,10 +89,10 @@ def query_example():
     # dire team: Venomancer, Faceless Void, Leshrac, Ancient Apparition
     # the missing element of the 2nd list is the one the suggestion is made for
     # the result is a list of (hero, (win_chance, overall_team_similarity)) sorted by win_chance
-    partial_result = query(3000,
-                           [59, 56, 54, 48, 31],
-                           [40, 41, 52, 68])
-    logger.info("The result of the partial query is: \n%s", partial_result)
+    #partial_result = query(3000,
+    #                       [59, 56, 54, 48, 31],
+    #                       [40, 41, 52, 68])
+    #logger.info("The result of the partial query is: \n%s", partial_result)
 
 
 def visualize_data_example():
@@ -102,19 +103,19 @@ def visualize_data_example():
     # plot learning curve for a loaded dataset with either matplotlib or plotly
     # subsets represents the number of points where the accuracies are evaluated
     # cv represents the number of folds for each point of the evaluation
-    features, _ = read_dataset('706e_train_dataset.csv', low_mmr=3000, high_mmr=3500)
-    plot_learning_curve(features[0], features[1], subsets=20, cv=3, mmr=3250, tool='matplotlib')
+    features, _ = read_dataset('train_dataset.csv', low_mmr=3000, high_mmr=3100)
+    plot_learning_curve(features[0], features[1], subsets=20, cv=3, mmr=5000, tool='matplotlib')
 
     # the rest of the plots were implemented only for plotly because of their size
 
     # plot win rate statistics
-    winrate_statistics(features, '3000 - 3500')
+    winrate_statistics(features, '3000 - 3100')
 
     # plot pick rate statistics
-    pick_statistics(features, '3000 - 3500')
+    pick_statistics(features, '3000 - 3100')
 
     # plot mmr distribution
-    mmr_distribution('706e_train_dataset.csv')
+    mmr_distribution('train_dataset.csv')
 
     # plot synergies and counters for hero combinations
     # they are loaded from the pretrained folder
@@ -123,16 +124,16 @@ def visualize_data_example():
 
     # plot hero map containing the heroes grouped by the similarity of their role
     # the heroes are clustered by roles: support, offlane, mid, carry
-    plot_hero_map('706e_train_dataset.csv')
+    plot_hero_map('train_dataset.csv')
 
 
 def main():
-    #mine_data_example()
-    #patch_data_example()
-    #load_dataset_example()
+    mine_data_example()
+    patch_data_example()
+    load_dataset_example()
     training_example()
-    #query_example()
-    #visualize_data_example()
+    query_example()
+    visualize_data_example()
 
 
 if __name__ == '__main__':
