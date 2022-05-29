@@ -20,14 +20,14 @@ def mine_data_example():
     mine_data(file_name='test_dataset.csv')
 
     # mine 100 games from the last patch
-    #mined_df = mine_data(stop_at=100)
-    #logger.info("First 5 rows from the mined dataframe are: \n%s", mined_df.head().to_string())
+    mined_df = mine_data(stop_at=100)
+    logger.info("Первые 5 строк из добытого фрейма данных: \n%s", mined_df.head().to_string())
 
     # mine 1000 games between given match IDs and save file
-    #mine_data(file_name='mine_test.csv',
-    #          first_match_id=6525227303,
-    #          last_match_id=6536983009,-
-    #          stop_at=1000)
+    mine_data(file_name='mine_test.csv',
+              first_match_id=6525227303,
+              last_match_id=6536983009,
+              stop_at=1000)
 
 
 def patch_data_example():
@@ -89,10 +89,10 @@ def query_example():
     # dire team: Venomancer, Faceless Void, Leshrac, Ancient Apparition
     # the missing element of the 2nd list is the one the suggestion is made for
     # the result is a list of (hero, (win_chance, overall_team_similarity)) sorted by win_chance
-    #partial_result = query(3000,
-    #                       [59, 56, 54, 48, 31],
-    #                       [40, 41, 52, 68])
-    #logger.info("The result of the partial query is: \n%s", partial_result)
+    partial_result = query(3000,
+                           [59, 56, 54, 48, 31],
+                           [40, 41, 52, 68])
+    logger.info("Результат полного запроса: \n%s", partial_result)
 
 
 def visualize_data_example():
@@ -128,10 +128,10 @@ def visualize_data_example():
 
 
 def main():
-    mine_data_example()
-    patch_data_example()
-    load_dataset_example()
-    training_example()
+    #mine_data_example()
+    #patch_data_example()
+    #load_dataset_example()
+    #training_example()
     query_example()
     visualize_data_example()
 

@@ -44,8 +44,8 @@ def home():
                 'radiantTeam': request.json['radiantTeam'],
                 'direTeam': request.json['direTeam']
             }
-            http.request('POST', "http://localhost:9100/api/msg4", fields, timeout=1.3)
-        except (urllib.error.URLError, ssl.SSLError) as error:
+            http.request('POST', "http://localhost:9100/api/msg4", fields, timeout=0.6)
+        except:
             logger.error("Failed to send message to telegram bot.")
         return text
 

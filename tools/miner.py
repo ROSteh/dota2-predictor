@@ -1,4 +1,4 @@
-""" Module responsible with mining games from Opendota """
+""" Модуль, отвечающий за майнинг игр от Opendota """
 
 import json
 import logging
@@ -30,9 +30,10 @@ def mine_data(file_name=None,
               stop_at=None,
               timeout=1.5,
               save_every=1000):
-    """ Mine data using the official Opendota API. Keep requests at a decent rate (3/s).
-    For every request, a JSON containing 100 games is returned. The games are downloaded
-    in descending order of the match IDs.
+    """ Добыча данных с помощью официального API Opendota.
+        Сохранение запросов с приличной скоростью (3/с).
+        На каждый запрос возвращается JSON, содержащий 100 игр.
+        Игры загружаются в порядке убывания идентификаторов матчей.
 
     Args:
         file_name: the name of the file where the dataframe will be stored
@@ -59,7 +60,7 @@ def mine_data(file_name=None,
     while current_match_id > first_match_id:
         try:
             current_link = OPENDOTA_URL + str(current_match_id)
-            logger.info("Mining chunk starting at match ID %d", current_match_id)
+            logger.info("Майнинг стартанул, начиная с матча ID %d", current_match_id)
             response = http.request('GET', current_link, timeout=timeout)
         except (urllib.error.URLError, ssl.SSLError) as error:
             logger.error("Failed to make a request starting at match ID %d", current_match_id)
@@ -92,7 +93,7 @@ def mine_data(file_name=None,
 
             if file_name:
                 pd.DataFrame(results_dataframe, columns=COLUMNS).to_csv(file_name, index=False)
-                logger.info("Saving to csv. Total of games mined: %d", len(results_dataframe))
+                logger.info("Сохранение в csv. Всего добыто игр: %d", len(results_dataframe))
 
                 if stop_at:
                     if len(results_dataframe) >= stop_at:

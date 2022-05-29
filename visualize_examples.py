@@ -27,23 +27,23 @@ def visualize_data_example1():
     # subsets represents the number of points where the accuracies are evaluated
     # cv represents the number of folds for each point of the evaluation
     features, _ = read_dataset('706e_train_dataset.csv', low_mmr=3000, high_mmr=3500)
-    #plot_learning_curve(features[0], features[1], subsets=20, cv=3, mmr=3250, tool='matplotlib')
+    plot_learning_curve(features[0], features[1], subsets=20, cv=3, mmr=3250, tool='matplotlib')
 
     # the rest of the plots were implemented only for plotly because of their size
 
     # plot win rate statistics
-    #winrate_statistics(features, '3000 - 3500')
+    winrate_statistics(features, '3000 - 3500')
 
     # plot pick rate statistics
-   # pick_statistics(features, '3000 - 3500')
+    pick_statistics(features, '3000 - 3500')
 
     # plot mmr distribution
-   # mmr_distribution('706e_train_dataset.csv')
+    mmr_distribution('706e_train_dataset.csv')
 
     # plot synergies and counters for hero combinations
     # they are loaded from the pretrained folder
-  #  plot_synergies()
- #   plot_counters()
+    plot_synergies()
+    plot_counters()
 
     # plot hero map containing the heroes grouped by the similarity of their role
     # the heroes are clustered by roles: support, offlane, mid, carry

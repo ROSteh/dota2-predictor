@@ -104,7 +104,7 @@ def _generate_batch(data, batch_size, num_skips, window_size):
 
 def _train_word2vec(data, batch_size, vocabulary_size, embedding_size, neg_samples, window_size, num_steps,
                     reverse_dictionary, heroes_dict):
-    """ Учитывая входные данные и гиперпараметры, обучите набор данных игр, используя word2vec с особенностями skip-gram.
+    """ Учитывая входные данные и гиперпараметры, обучение набором данных игр, используя word2vec с особенностями skip-gram.
 
      Args:
         data: list of indices obtained by mapping the words' indices to the corpus
@@ -141,12 +141,7 @@ def _train_word2vec(data, batch_size, vocabulary_size, embedding_size, neg_sampl
 
         embed = tf.nn.embedding_lookup(embeddings, train_dataset)
         loss = tf.reduce_mean(
-            tf.nn.sampled_softmax_loss(softmax_weights,
-                                       softmax_biases,
-                                       train_labels,
-                                       embed,
-                                       neg_samples,
-                                       vocabulary_size))
+            tf.nn.sampled_softmax_loss(softmax_weights, softmax_biases, train_labels, embed, neg_samples, vocabulary_size))
 
         optimizer = tf.compat.v1.train.AdagradOptimizer(1.0).minimize(loss)
 
@@ -175,7 +170,7 @@ def _train_word2vec(data, batch_size, vocabulary_size, embedding_size, neg_sampl
             if step % 2000 == 0:
                 if step > 0:
                     average_loss = average_loss / 2000
-                logger.info('Average loss at step %d: %f', step, average_loss)
+                logger.info('Средняя потеря на шаге %d: %f', step, average_loss)
                 average_loss = 0
 
             # print a sample of similarities between heroes every 10k steps
@@ -191,7 +186,7 @@ def _train_word2vec(data, batch_size, vocabulary_size, embedding_size, neg_sampl
 
                         top_k = 8  # number of nearest neighbors to print
                         nearest = (-sim[i, :]).argsort()[1:top_k + 1]
-                        log = 'Nearest to %s:' % valid_word
+                        log = 'Ближайший к %s:' % valid_word
 
                         for k in range(top_k):
                             try:
