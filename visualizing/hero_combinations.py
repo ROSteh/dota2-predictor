@@ -1,4 +1,4 @@
-""" Module responsible with plotting of hero synergies and counters """
+""" Модуль, отвечающий за прорисовку синергий и счетчиков героев. """
 import numpy as np
 
 import plotly.graph_objs as go
@@ -41,7 +41,6 @@ def plot_synergies():
                    tickfont=dict(
                         size=8,
                         color='black'))
-
     )
 
     data = [trace]

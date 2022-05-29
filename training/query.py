@@ -1,4 +1,4 @@
-""" Module responsible for querying the result of a game """
+""" Модуль, отвечающий за запрос результата игры. """
 
 import operator
 import os
@@ -16,16 +16,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def _query_missing(model,
-                   scaler,
-                   radiant_heroes,
-                   dire_heroes,
-                   synergies,
-                   counters,
-                   similarities,
-                   heroes_released):
-    """ Query the best missing hero that can be picked given 4 heroes in one
-    team and 5 heroes in the other.
+def _query_missing(model, scaler, radiant_heroes, dire_heroes, synergies, counters, similarities, heroes_released):
+    """ Запрос лучшего отсутствующего героя, которого можно выбрать, учитывая 4 героя в одной команде и 5 героев в другой..
 
     Args:
         model: estimator that has fitted the data
@@ -63,10 +55,7 @@ def _query_missing(model,
             query_base[i][radiant_heroes[j] - 1] = 1
             query_base[i][dire_heroes[j] - 1 + heroes_released] = 1
 
-        query_base[i][-3:] = augment_with_advantages(synergies,
-                                                     counters,
-                                                     radiant_heroes,
-                                                     dire_heroes)
+        query_base[i][-3:] = augment_with_advantages(synergies, counters, radiant_heroes, dire_heroes)
 
         if radiant:
             del radiant_heroes[-1]
@@ -120,15 +109,8 @@ def _query_missing(model,
     return filtered_list
 
 
-def _query_full(model,
-                scaler,
-                radiant_heroes,
-                dire_heroes,
-                synergies,
-                counters,
-                heroes_released):
-    """ Query the result of a game when both teams have their line-ups
-    finished.
+def _query_full(model, scaler, radiant_heroes, dire_heroes, synergies, counters, heroes_released):
+    """ Запрос предсказания результата игры, когда обе команды завершили выбор состава героев.
 
     Args:
         model: estimator that has fitted the data
@@ -160,12 +142,7 @@ def _query_full(model,
         return "Победит Dire с шансом  %.3f%%" % (100 - probability)
 
 
-def query(mmr, 
-          radiant_heroes, 
-          dire_heroes, 
-          synergies=None, 
-          counters=None, 
-          similarities=None):
+def query(mmr, radiant_heroes, dire_heroes, synergies=None, counters=None, similarities=None):
     if similarities is None:
         sims = np.loadtxt('pretrained/similarities_all.csv')
     else:
@@ -182,15 +159,15 @@ def query(mmr,
         syns = np.loadtxt(synergies)
 
     if mmr < 0 or mmr > 10000:
-        logger.error("MMR should be a number between 0 and 10000")
+        logger.error("MMR должен быть числом от 0 до 10000.")
         return
 
     if mmr < 2000:
         model_dict = joblib.load(os.path.join("pretrained", "2000-.pkl"))
-        logger.info("Using 0-2000 MMR model")
+        logger.info("Используется 0-2000 MMR model")
     elif mmr > 5000:
         model_dict = joblib.load(os.path.join("pretrained", "5000+.pkl"))
-        logger.info("Using 5000-10000 MMR model")
+        logger.info("Используется 5000-10000 MMR model")
     else:
         file_list = [int(valid_file[:4]) for valid_file in listdir('pretrained')
                      if '.pkl' in valid_file]
@@ -205,7 +182,7 @@ def query(mmr,
                 min_distance = abs(mmr - model_mmr)
                 final_mmr = model_mmr
 
-        logger.info("Using closest model available: %d MMR model", final_mmr)
+        logger.info("Использование ближайшей доступной модели: %d MMR model", final_mmr)
 
         model_dict = joblib.load(os.path.join("pretrained", str(final_mmr) + ".pkl"))
 
@@ -216,20 +193,7 @@ def query(mmr,
     heroes_released = last_patch_info['heroes_released']
 
     if len(radiant_heroes) + len(dire_heroes) == 10:
-        return _query_full(model,
-                           scaler,
-                           radiant_heroes,
-                           dire_heroes,
-                           syns,
-                           cnts,
-                           heroes_released)
+        return _query_full(model, scaler, radiant_heroes, dire_heroes, syns, cnts, heroes_released)
 
     if len(radiant_heroes) + len(dire_heroes) == 9:
-        return _query_missing(model,
-                              scaler,
-                              radiant_heroes,
-                              dire_heroes,
-                              syns,
-                              cnts,
-                              sims,
-                              heroes_released)
+        return _query_missing(model, scaler, radiant_heroes, dire_heroes, syns, cnts, sims, heroes_released)

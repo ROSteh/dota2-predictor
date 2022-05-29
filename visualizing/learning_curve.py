@@ -20,7 +20,7 @@ def plot_learning_curve(x_train, y_train, subsets=20, mmr=None, cv=5, tool='matp
     results_list = [[], []]
 
     for subset_size in subset_sizes:
-        logger.info('Performing cross validation on subset_size %d', subset_size)
+        logger.info('Выполнение перекрестной проверки для subset_size %d', subset_size)
         _, _, cv_score, roc_auc, _ = evaluate([x_train[:subset_size], y_train[:subset_size]],
                                               [x_test, y_test], cv=cv)
 
@@ -34,7 +34,7 @@ def plot_learning_curve(x_train, y_train, subsets=20, mmr=None, cv=5, tool='matp
 
 
 def _plot_matplotlib(subset_sizes, data_list, mmr):
-    """ Plots learning curve using matplotlib backend.
+    """ Строит кривую обучения, используя бэкэнд matplotlib.
     Args:
         subset_sizes: list of dataset sizes on which the evaluation was done
         data_list: list of ROC AUC scores corresponding to subset_sizes
@@ -57,7 +57,7 @@ def _plot_matplotlib(subset_sizes, data_list, mmr):
 
 
 def _plot_plotly(subset_sizes, data_list, mmr):
-    """ Plots learning curve using plotly backend.
+    """ Строит кривую обучения, используя бэкэнд plotly.
     Args:
         subset_sizes: list of dataset sizes on which the evaluation was done
         data_list: list of ROC AUC scores corresponding to subset_sizes

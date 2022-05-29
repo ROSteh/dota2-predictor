@@ -20,8 +20,8 @@ data_index = 0
 
 
 def _build_vocabulary(words, vocabulary_size):
-    """ Creates a dictionary representing a vocabulary and counts the appearances of each word
-    In this context, each word represents a hero's index casted to string e.g. Anti-Mage -> "1"
+    """ Создает словарь, и подсчитывает появление каждого слова.
+     В этом контексте каждое слово представляет собой индекс героя, приведенный к строке, например. Антимаг -> "1"
 
     Args:
         words: list of strings representing the corpus
@@ -62,7 +62,7 @@ def _build_vocabulary(words, vocabulary_size):
 
 
 def _generate_batch(data, batch_size, num_skips, window_size):
-    """ Generates a batch of data to be used in training using the skip-gram flavor of word2vec
+    """ Генерирует пакет данных для использования в обучении, используя разновидность word2vec skip-gram.
 
     Args:
         data: list of indices obtained by mapping the words' indices to the corpus
@@ -102,17 +102,9 @@ def _generate_batch(data, batch_size, num_skips, window_size):
     return batch, labels
 
 
-def _train_word2vec(data,
-                    batch_size,
-                    vocabulary_size,
-                    embedding_size,
-                    neg_samples,
-                    window_size,
-                    num_steps,
-                    reverse_dictionary,
-                    heroes_dict):
-    """ Given input data and hyperparameters, train the dataset of games using word2vec with
-    skip-gram flavor
+def _train_word2vec(data, batch_size, vocabulary_size, embedding_size, neg_samples, window_size, num_steps,
+                    reverse_dictionary, heroes_dict):
+    """ Учитывая входные данные и гиперпараметры, обучите набор данных игр, используя word2vec с особенностями skip-gram.
 
      Args:
         data: list of indices obtained by mapping the words' indices to the corpus
@@ -222,9 +214,9 @@ def _train_word2vec(data,
 
 
 def _plot_similarities(embeddings, heroes_dict, reverse_dictionary, perplexity=20):
-    """ Plot the obtained hero embeddings using TSNE algorithm in 2D space.
-    There are 4 assumed roles: Mid, Carry, Offlaner, Support, each category containing a
-    representative hardcoded hero in order to correctly identify each cluster's role.
+    """ Построение полученных ролей героев с использованием алгоритма TSNE в 2D-пространстве.
+     Есть 4 предполагаемые роли: мид, керри, оффлейнер, поддержка, каждая категория содержит
+     репрезентативный жестко закодированный герой, чтобы правильно определить роль каждого кластера.
 
     Args:
         embeddings: hero embeddings obtained after training
@@ -320,16 +312,9 @@ def _plot_similarities(embeddings, heroes_dict, reverse_dictionary, perplexity=2
     py.plot(figure, filename='heromap')
 
 
-def plot_hero_map(csv_path,
-                  batch_size=128,
-                  embedding_size=25,
-                  window_size=2,
-                  neg_samples=64,
-                  num_steps=30001,
-                  low_mmr=0,
-                  high_mmr=9000):
-    """ Creates a 2D plot of the heroes based on their similarity obtained with word2vec. The result
-    is uploaded to plotly.
+def plot_hero_map(csv_path, batch_size=128, embedding_size=25, window_size=2, neg_samples=64, num_steps=30001,
+                  low_mmr=0, high_mmr=9000):
+    """ Создает 2D-график героев на основе их сходства, полученного с помощью word2vec. Результат загружается в график.
 
     Args:
         csv_path: path to the training dataset csv
@@ -366,8 +351,8 @@ def plot_hero_map(csv_path,
     # create vocabulary using the corpus
     data, count, dictionary, reverse_dictionary = _build_vocabulary(words, vocabulary_size)
 
-    logger.info('Most common heroes (+UNK): %s', count[:5])
-    logger.info('Sample data: %s', data[:10])
+    logger.info('Самые распространенные герои (+UNK): %s', count[:5])
+    logger.info('Образец данных: %s', data[:10])
 
     # free unused memory
     del words

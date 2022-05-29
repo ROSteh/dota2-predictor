@@ -1,11 +1,11 @@
-""" Module responsible for calculating advantages given a dataset of games """
+""" Модуль, отвечающий за расчет преимуществ по набору данных игр. """
 import numpy as np
 
 from tools.metadata import get_last_patch
 
 
 def _update_dicts(game, synergy, counter):
-    """ Updates the synergy and counter games given the game given as input
+    """ Обновляет синергию и встречные игры, учитывая игру, указанную в качестве входных данных.
     Args:
         game: row of a mined pandas DataFrame
         synergy: synergy matrix
@@ -39,9 +39,8 @@ def _update_dicts(game, synergy, counter):
 
 
 def _compute_winrates(synergy, counter, heroes_released):
-    """ Calculates the winrate of every combination of heroes released from a synergy perspective
-    and a counter perspective. The results are stored in the synergy and counter dictionaries
-    using the 'winrate' key.
+    """ Рассчитывает винрейт каждой комбинации выпущенных героев с точки зрения синергии и контратаки.
+    Результаты сохраняются в словарях синергии и счетчиков с помощью ключа 'winrate'.
     Args:
         synergy: synergy matrix
         counter: counter matrix
@@ -62,9 +61,10 @@ def _compute_winrates(synergy, counter, heroes_released):
 
 
 def _adv_synergy(winrate_together, winrate_hero1, winrate_hero2):
-    """ Given the winrate of 2 heroes played separately and together, return a score representing
-    the advantage of the heroes being played together. There have been many tries in calculating
-    this advantage score but simple winrate when playing together seems to work best.
+    """ Учитывая винрейт двух героев, сыгранных по отдельности и вместе, возвращает счет,
+    отражающий преимущество героев сыгранных вместе.
+    Было предпринято много попыток рассчитать это преимущество,
+    но простой винрейт при совместной игре работает лучше всего.
     Args:
         winrate_together: winrate when both heroes are played in the same team
         winrate_hero1: general winrate of hero1
@@ -76,10 +76,10 @@ def _adv_synergy(winrate_together, winrate_hero1, winrate_hero2):
 
 
 def _adv_counter(winrate_together, winrate_hero1, winrate_hero2):
-    """ Given the winrate of one hero when playing against another hero and their separated
-    winrates, return a score representing the advantage when hero1 is picked against hero2. There
-    have been many tries in calculating this advantage score but simple winrate when playing against
-    eachother seems to work best.
+    """ Учитывая винрейт одного героя при игре против другого героя и их отдельные винрейты, возвращает счет,
+    представляющий преимущество, когда герой1 выбран против героя2.
+    Было предпринято много попыток рассчитать этот показатель преимущества,
+    но простой винрейт при игре друг против друга, кажется, работает лучше всего..
     Args:
         winrate_together: winrate when hero1 is picked against hero2
         winrate_hero1: general winrate of hero1
@@ -91,7 +91,7 @@ def _adv_counter(winrate_together, winrate_hero1, winrate_hero2):
 
 
 def _calculate_advantages(synergy, counter, heroes_released):
-    """ Calculate base winrate for every hero and use it to compute advantages
+    """ Рассчет базового процента побед для каждого героя и использование его для расчета преимуществ
     Args:
         synergy: synergy matrix
         counter: counter matrix
@@ -129,8 +129,9 @@ def _calculate_advantages(synergy, counter, heroes_released):
 
 
 def compute_advantages(dataset_df):
-    """ Given a pandas DataFrame as input, calculate advantages and store them in synergy and
-    counter dictionaries. The results are stored in files for easier later use.
+    """ Получение в качестве входных данных DataFrame данных pandas,
+    рассчет преимуществ и сохранение их в словарях синергии и противодействия.
+    Результаты сохраняются в файлах для более удобного последующего использования.
     Args:
         dataset_df: pandas DataFrame containing the games to be analyzed
     Returns:

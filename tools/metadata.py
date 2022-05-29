@@ -1,4 +1,4 @@
-""" Module responsible for parsing metadata """
+""" Модуль, отвечающий за парсинг метаданных """
 
 import json
 import logging
@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def _load_metadata():
-    """ Loads the metadata JSON
+    """ Загружает метаданные JSON
     Returns:
         JSON containing the metadata
     """
@@ -23,7 +23,7 @@ def _load_metadata():
 
 
 def get_last_patch():
-    """ Fetches the last patch info
+    """ Получает информацию о последнем патче
     Returns:
         dictionary containing info of the last patch
     """
@@ -32,7 +32,7 @@ def get_last_patch():
 
 
 def get_patch(patch_name):
-    """ Fetches the patch info named patch_name
+    """ Получает информацию о патче с именем patch_name
     Args:
         patch_name: patch identifier
     Returns:
@@ -50,7 +50,7 @@ def get_patch(patch_name):
 
 
 def get_hero_dict():
-    """ Returns a dictionary where the key is the hero ID and the value is the hero's name
+    """ Возвращает словарь, где ключом является идентификатор героя, а значением — имя героя.
     Returns:
         dictionary of (hero_ID, name)
     """

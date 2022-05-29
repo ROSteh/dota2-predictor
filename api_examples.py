@@ -1,4 +1,4 @@
-""" Module for showing examples of dota predictor's API usage """
+""" Модуль для демонстрации примеров использования API Dota Predictor """
 import logging
 
 from preprocessing.dataset import read_dataset
@@ -33,13 +33,13 @@ def mine_data_example():
 def patch_data_example():
     # information about latest patch released
     last_patch = get_last_patch()
-    logger.info("Latest patch released is: %s", last_patch['patch_name'])
-    logger.info("Match IDs for latest patch span between %s and %s", last_patch['first_match_id'],
+    logger.info("Последний выпущенный патч: %s", last_patch['patch_name'])
+    logger.info("Идентификаторы соответствия для последнего патча между %s и %s", last_patch['first_match_id'],
                 last_patch['last_match_id'])
 
     # information about specific patch
     patch = get_patch('7.06e')
-    logger.info("Match IDs for %s span between %d and %d", patch['patch_name'],
+    logger.info("Идентификаторы соответствия для диапазона %s между %d и %d", patch['patch_name'],
                 patch['first_match_id'], patch['last_match_id'])
 
 
@@ -82,7 +82,7 @@ def query_example():
                         [23, 25, 108, 86, 21])
     logger.info("Radiant id:[42, 120, 43, 33, 45]")
     logger.info("Dire id:[23, 25, 108, 86, 21]")
-    logger.info("The result of the full query is: %s", full_result)
+    logger.info("Результат полного запроса: %s", full_result)
 
     # query for the result given the 4v5 or 5v4 configuration in a game around 3000 average MMR
     # radiant team: Huskar, Clinkz, Lifestealer, Luna, Lich

@@ -3,7 +3,7 @@ import numpy as np
 
 
 def augment_with_advantages(synergy, counter, radiant_heroes, dire_heroes):
-    """ Computes a numpy array containing the features that have to be appended to a game
+    """ Вычисляет массив numpy, содержащий функции, которые необходимо добавить в игру.
     Args:
         synergy: synergy matrix
         counter: counter matrix

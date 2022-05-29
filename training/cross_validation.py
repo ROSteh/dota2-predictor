@@ -1,4 +1,4 @@
-""" Module responsible with training, evaluating and cross validation of data """
+""" Модуль, отвечающий за обучение, оценку и перекрестную проверку данных. """
 import logging
 import numpy as np
 
@@ -8,20 +8,21 @@ from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 def evaluate(train_data, test_data, cv=5, save_model=None):
-    """ Given train data, performs cross validation using cv folds, then calculates the score on
-    test data. The metric used is roc_auc_score from sklearn. Before training, the data is
-    normalized and the scaler used is saved for scaling the test data in the same manner.
+    """ Учитывая обучающие данные, выполняет перекрестную проверку с использованием cv-сгибов, а затем вычисляет оценку
+     по тестовым данным. Используемая метрика — roc_auc_score от sklearn. Перед обучением данные нормализуются,
+     и используемый скейлер сохраняется для масштабирования тестовых данных таким же образом.
 
     Args:
         train_data: list containing x_train and y_train
         test_data: list containing x_test and y_test
-        cv: number of folds to use in cross validation
-        save_model: if given, the model is saved to this path
+        cv: количество сгибов для использования в перекрестной проверке
+        save_model: если указано, модель сохраняется по этому пути
     Returns:
         train size, test size, roc_auc score
     """
@@ -41,7 +42,7 @@ def evaluate(train_data, test_data, cv=5, save_model=None):
                                            n_jobs=-1)
 
         cross_val_mean = np.mean(cross_val_scores)
-        logger.info("Cross validation scores over the training set (%d folds): %.3f +/- %.3f", cv,
+        logger.info("Оценки перекрестной проверки по тренировочному набору (%d складки): %.3f +/- %.3f", cv,
                     cross_val_mean,
                     np.std(cross_val_scores))
 
@@ -62,6 +63,6 @@ def evaluate(train_data, test_data, cv=5, save_model=None):
         joblib.dump(model_dict, save_model)
 
     logger.info("Test ROC AUC: %.3f", roc_auc)
-    logger.info("Test accuracy score: %.3f", acc_score)
+    logger.info("Оценка точности теста: %.3f", acc_score)
 
     return (x_train.shape[0], x_test.shape[0], cross_val_mean, roc_auc, acc_score)

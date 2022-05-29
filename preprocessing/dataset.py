@@ -11,8 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def _dataset_to_features(dataset_df, advantages=None):
-    """ Transforms a mined pandas DataFrame into a feature matrix. This method assumes the following
-    format of a DataFrame:
+    """ Преобразует добытый DataFrame pandas в матрицу признаков. Этот метод предполагает следующий формат DataFrame:
     columns: [match_id,radiant_win,radiant_team,dire_team,avg_mmr,num_mmr,game_mode,lobby_type]
 
     Args:
@@ -61,8 +60,8 @@ def read_dataset(csv_path,
                  low_mmr=None,
                  high_mmr=None,
                  advantages=False):
-    """ Reads pandas DataFrame from csv_path, filters games between low_mmr and high_mmr if given
-    and appends synergy and counter features
+    """ Читает Pandas DataFrame из csv_path, фильтрует игры между low_mmr и high_mmr, если указано,
+    и добавляет функции синергии и счетчика
 
     Args:
         csv_path: path to read pandas DataFrame from
@@ -82,18 +81,18 @@ def read_dataset(csv_path,
     if high_mmr:
         dataset_df = dataset_df[dataset_df.avg_mmr < high_mmr]
 
-    logger.info("The dataset contains %d games", len(dataset_df))
+    logger.info("Набор данных содержит %d игр", len(dataset_df))
 
     if advantages:
-        logger.info("Computing advantages...")
+        logger.info("Вычисление преимуществ...")
         advantages_list = compute_advantages(dataset_df)
     else:
-        logger.info("Loading advantages from files...")
+        logger.info("Загрузка преимуществ из файлов...")
         synergies = np.loadtxt('pretrained/synergies_all.csv')
         counters = np.loadtxt('pretrained/counters_all.csv')
         advantages_list = [synergies, counters]
 
-    logger.info("Transforming dataframe in feature map...")
+    logger.info("Преобразование фрейма данных в карту объектов...")
     feature_map = _dataset_to_features(dataset_df, advantages=advantages_list)
 
     return [feature_map, advantages_list]
